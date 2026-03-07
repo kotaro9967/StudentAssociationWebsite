@@ -1,0 +1,81 @@
+---
+// Hero.astro
+---
+
+<section class="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  {/* 一番下の背景画像 */}
+  <div
+    class="absolute inset-0 -z-30"
+    style="background-image: url('東京理科大学2.jpg'); background-size: cover; background-position: center;"
+  ></div>
+
+  {/* グラデーションぼかしのオーバーレイ */}
+  <div
+    class="absolute inset-0 -z-20 backdrop-blur-md bg-black/10"
+    style="mask-image: linear-gradient(to right, black 30%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 30%, transparent 100%);"
+  ></div>
+
+  <div class="max-w-7xl mx-auto w-full relative">
+    {/* アニメーションさせる要素にID「hero-content」を付けます */}
+    <div
+      id="hero-content"
+      class="max-w-4xl"
+      style="will-change: transform, opacity;"
+    >
+      {/* サブヘッディング */}
+      <div class="text-xl inline-block mb-6 px-4 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-blue-950 tracking-widest font-bold">
+        Tokyo University of Science
+      </div>
+
+      {/* 影用のdivで囲み、h1はグラデーション専用にする（これでバグりません！） */}
+      <div class="drop-shadow-[12px_12px_8px_rgba(255,255,255,0.4)] mb-8">
+        <h1 class="text-5xl sm:text-6xl md:text-8xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-black to-blue-900 bg-clip-text text-transparent">
+          東京理科大学
+          <br class="hidden sm:block" />
+          学友会
+        </h1>
+      </div>
+
+      {/* 説明文 (text-blue-950 を正しく適用しました！) */}
+      <p class="relative z-10 text-lg sm:text-2xl text-blue-950 mb-12 max-w-2xl leading-relaxed tracking-wide font-medium drop-shadow-[12px_12px_8px_rgba(255,255,255,0.4)]">
+        学生生活を豊かにする、多様なサークル活動と
+        <br class="hidden sm:block" />
+        充実したサポートを提供しています。
+      </p>
+
+      {/* ボタン */}
+      <div class="flex flex-col sm:flex-row gap-4 mb-20">
+        <a
+          href="/about"
+          class="px-8 py-3 rounded-full bg-blue-950 text-white font-bold text-center hover:bg-blue-800 transition-colors"
+        >
+          学友会について
+        </a>
+        <a
+          href="/circles"
+          class="px-8 py-3 rounded-full bg-blue-200 text-black/95 font-bold text-center hover:bg-blue-300 transition-colors"
+        >
+          サークルを探す
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // クライアント側（ブラウザ）で実行されるスクロールアニメーション処理
+  const heroContent = document.getElementById('hero-content');
+
+  // 要素が存在する場合のみ処理を実行（エラー防止）
+  if (heroContent) {
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      
+      // スクロール量の20%だけ下に移動
+      heroContent.style.transform = `translateY(${scrollY * 0.5}px)`;
+      
+      // 400pxスクロールする間に徐々に透明にする
+      heroContent.style.opacity = Math.max(1 - scrollY / 400, 0).toString();
+    });
+  }
+</script>

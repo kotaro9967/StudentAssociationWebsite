@@ -1,0 +1,25 @@
+
+---
+import { Header } from '../components/Header';
+import Hero from '../components/Hero.astro';
+import { QuickAccess } from '../components/QuickAccess';
+import { CircleSection } from '../components/CircleSection';
+import { NewsSection } from '../components/NewsSection';
+import { Footer } from '../components/Footer';
+import '../styles/index.css';
+---
+
+
+<html lang="ja">
+  <meta charset="UTF-8" />
+  <body>
+    <Header client:load />
+    <main>
+      <Hero/>
+      <QuickAccess client:load />
+      <CircleSection client:load />
+      <NewsSection client:load />
+    </main>
+    <Footer client:load />
+  </body>
+</html>
