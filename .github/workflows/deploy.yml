@@ -1,7 +1,6 @@
 name: Deploy to GitHub Pages
 
 on:
-  # mainブランチにプッシュされた時に自動で動きます
   push:
     branches: [main]
   workflow_dispatch:
@@ -17,6 +16,11 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
+      # 🌟 ここが最強の突破口！インストールが始まる前に、システムの設定を強制書き換えします！
+      - name: Force legacy peer deps
+        run: npm config set legacy-peer-deps true
+
       - name: Install, build, and upload your site
         uses: withastro/action@v3
 
