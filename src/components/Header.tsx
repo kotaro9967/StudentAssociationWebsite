@@ -34,7 +34,7 @@ export function Header() {
           <div className="shrink-0">
             <a href="#" className="flex items-center gap-3">
               <img
-                src={"学友会アイコン.png"}
+                src="/StudentAssociationWebsite/学友会アイコン.png"
                 alt="学友会ロゴ"
                 className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
               />
