@@ -1,81 +1,66 @@
 ---
-// Hero.astro
+const images = [
+  '東京理科大学1.jpg',
+  '東京理科大学2.jpg',
+  '東京理科大学3.jpg',
+  '東京理科大学4.jpg',
+  '東京理科大学5.jpg'
+];
 ---
 
-<section class="min-h-screen flex flex-col justify-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-  {/* 一番下の背景画像 */}
-  <div
-    class="absolute inset-0 -z-30"
-    style="background-image: url('東京理科大学2.jpg'); background-size: cover; background-position: center;"
-  ></div>
+<style>
+  .bg-slide {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center; opacity: 0;
+    animation: fadeZoom 40s infinite;
+  }
+  @keyframes fadeZoom {
+    0% { opacity: 0; transform: scale(1.08); }
+    5% { opacity: 1; }
+    20% { opacity: 1; }
+    25% { opacity: 0; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+</style>
 
-  {/* グラデーションぼかしのオーバーレイ */}
-  <div
-    class="absolute inset-0 -z-20 backdrop-blur-md bg-black/10"
-    style="mask-image: linear-gradient(to right, black 30%, transparent 100%); -webkit-mask-image: linear-gradient(to right, black 30%, transparent 100%);"
-  ></div>
+<section class="min-h-screen flex flex-col justify-end pb-10 sm:pb-16 px-4 sm:px-8 lg:px-12 relative overflow-hidden bg-black">
+  <div id="hero-bg-container" class="absolute inset-0 w-full h-full will-change-[filter]">
+    {images.map((img, index) => (
+      <div class="bg-slide" style={`background-image: url('${img}'); animation-delay: ${index * 8}s;`}></div>
+    ))}
+  </div>
+  <div id="hero-overlay" class="absolute inset-0 bg-black/40 will-change-opacity"></div>
 
-  <div class="max-w-7xl mx-auto w-full relative">
-    {/* アニメーションさせる要素にID「hero-content」を付けます */}
-    <div
-      id="hero-content"
-      class="max-w-4xl"
-      style="will-change: transform, opacity;"
-    >
-      {/* サブヘッディング */}
-      <div class="text-xl inline-block mb-6 px-4 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-blue-950 tracking-widest font-bold">
-        Tokyo University of Science
-      </div>
-
-      {/* 影用のdivで囲み、h1はグラデーション専用にする（これでバグりません！） */}
-      <div class="drop-shadow-[12px_12px_8px_rgba(255,255,255,0.4)] mb-8">
-        <h1 class="text-5xl sm:text-6xl md:text-8xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-black to-blue-900 bg-clip-text text-transparent">
-          東京理科大学
-          <br class="hidden sm:block" />
-          学友会
-        </h1>
-      </div>
-
-      {/* 説明文 (text-blue-950 を正しく適用しました！) */}
-      <p class="relative z-10 text-lg sm:text-2xl text-blue-950 mb-12 max-w-2xl leading-relaxed tracking-wide font-medium drop-shadow-[12px_12px_8px_rgba(255,255,255,0.4)]">
-        学生生活を豊かにする、多様なサークル活動と
+  <div class="w-full relative z-10">
+    <div id="hero-content" style="will-change: opacity, transform;">
+      <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl font-serif text-white tracking-widest drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)] opacity-0">
+        東京理科大学
         <br class="hidden sm:block" />
-        充実したサポートを提供しています。
-      </p>
-
-      {/* ボタン */}
-      <div class="flex flex-col sm:flex-row gap-4 mb-20">
-        <a
-          href="/about"
-          class="px-8 py-3 rounded-full bg-blue-950 text-white font-bold text-center hover:bg-blue-800 transition-colors"
-        >
-          学友会について
-        </a>
-        <a
-          href="/circles"
-          class="px-8 py-3 rounded-full bg-blue-200 text-black/95 font-bold text-center hover:bg-blue-300 transition-colors"
-        >
-          サークルを探す
-        </a>
-      </div>
+        学友会
+      </h1>
     </div>
   </div>
 </section>
 
 <script>
-  // クライアント側（ブラウザ）で実行されるスクロールアニメーション処理
-  const heroContent = document.getElementById('hero-content');
+  import gsap from "gsap";
 
-  // 要素が存在する場合のみ処理を実行（エラー防止）
-  if (heroContent) {
+  // ロード時のタイトルアニメーション
+  gsap.to(".hero-title", {
+    y: -20, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.5
+  });
+
+  // スクロールぼかし（Vanilla JSのままが最速です）
+  const heroContent = document.getElementById('hero-content');
+  const heroBgContainer = document.getElementById('hero-bg-container');
+  const heroOverlay = document.getElementById('hero-overlay');
+
+  if (heroContent && heroBgContainer && heroOverlay) {
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
-      
-      // スクロール量の20%だけ下に移動
-      heroContent.style.transform = `translateY(${scrollY * 0.5}px)`;
-      
-      // 400pxスクロールする間に徐々に透明にする
       heroContent.style.opacity = Math.max(1 - scrollY / 400, 0).toString();
+      heroBgContainer.style.filter = `blur(${Math.min(scrollY * 0.05, 20)}px)`;
+      heroOverlay.style.opacity = Math.min(0.4 + scrollY / 1000, 0.85).toString();
     });
   }
 </script>
